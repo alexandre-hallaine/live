@@ -4,7 +4,9 @@
 TMP=$(mktemp)
 for f in "$1"/*.mp3; do echo "file '$PWD/$f'" >> "$TMP"; done
 
-ffmpeg -y -f concat -safe 0 -i "$TMP" -c:a aac -b:a 192k audio.m4a
+ffmpeg -y -f concat -safe 0 -i "$TMP" \
+  -af loudnorm \
+  -c:a aac -b:a 192k audio.m4a
 rm "$TMP"
 
 DUR=$(ffprobe -v error -show_entries format=duration -of csv=p=0 audio.m4a)
